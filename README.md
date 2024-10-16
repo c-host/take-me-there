@@ -2,6 +2,8 @@
 
 A website library and template for creating unique journeys to https://www.howdidyoufind.me/
 
+Take a journey: https://c-host.github.io/take-me-there/index.html
+
 ## About
 
 Take Me There is a collection of interactive web experiences that guide users through various paths to reach the "How Did You Find Me" website. Each path in the library offers a unique journey, showcasing different web technologies and creative approaches.
