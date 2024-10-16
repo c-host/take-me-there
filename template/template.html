@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Take Me There - Template</title>
+    <style>
+        /* Add your custom styles here */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        #container {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <h1>Your Custom Path</h1>
+        <!-- Add your custom elements here -->
+        <button id="start-journey">Start Journey</button>
+    </div>
+
+    <script>
+        // Add your custom JavaScript here
+        const finalWebsite = 'https://www.howdidyoufind.me';
+
+        document.getElementById('start-journey').addEventListener('click', () => {
+            // Add your journey logic here
+            console.log('Journey started!');
+            // When the journey is complete, navigate to the final website
+            // window.location.href = finalWebsite;
+        });
+    </script>
+</body>
+
+</html>

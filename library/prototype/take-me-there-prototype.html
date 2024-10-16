@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Take Me There</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        #container {
+            text-align: center;
+        }
+
+        #countdown {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        #current-site {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        #journey {
+            margin-top: 20px;
+        }
+
+        #copy-button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <div id="countdown"></div>
+        <div id="current-site"></div>
+        <div id="journey"></div>
+        <button id="copy-button" style="display: none;">Copy Journey</button>
+    </div>
+
+    <script>
+        const websites = [
+            'https://example.com',
+            'https://placeholder.com',
+            'https://dummysite.com',
+            'https://samplewebsite.com',
+            'https://testdomain.com'
+        ];
+        const finalWebsite = 'https://www.howdidyoufind.me';
+        let currentIndex = 0;
+        let journey = [];
+
+        function getRandomTime() {
+            return Math.floor(Math.random() * (8 - 4 + 1) + 4);
+        }
+
+        function formatTime(seconds) {
+            return `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
+        }
+
+        function updateCountdown(seconds) {
+            document.getElementById('countdown').textContent = formatTime(seconds);
+        }
+
+        function showCurrentSite(url) {
+            document.getElementById('current-site').textContent = `Current site: ${url}`;
+        }
+
+        function navigateToNextSite() {
+            if (currentIndex < websites.length) {
+                const site = websites[currentIndex];
+                const time = getRandomTime();
+                journey.push({ site, time });
+                showCurrentSite(site);
+                let remainingTime = time;
+
+                const timer = setInterval(() => {
+                    updateCountdown(remainingTime);
+                    remainingTime--;
+
+                    if (remainingTime < 0) {
+                        clearInterval(timer);
+                        currentIndex++;
+                        navigateToNextSite();
+                    }
+                }, 1000);
+            } else {
+                showJourneySummary();
+            }
+        }
+
+        function showJourneySummary() {
+            document.getElementById('countdown').style.display = 'none';
+            document.getElementById('current-site').style.display = 'none';
+
+            const journeyHtml = journey.map((step, index) =>
+                `${index + 1}. ${step.site} (${step.time} seconds)`
+            ).join('<br>');
+
+            document.getElementById('journey').innerHTML = `
+                <h2>Your Journey:</h2>
+                ${journeyHtml}<br>
+                6. ${finalWebsite} (Final Destination)
+            `;
+
+            document.getElementById('copy-button').style.display = 'inline-block';
+        }
+
+        document.getElementById('copy-button').addEventListener('click', () => {
+            const journeyText = journey.map((step, index) =>
+                `${index + 1}. ${step.site} (${step.time} seconds)`
+            ).join('\n') + `\n6. ${finalWebsite} (Final Destination)`;
+
+            navigator.clipboard.writeText(journeyText).then(() => {
+                alert('Journey copied to clipboard! Redirecting to the final destination...');
+                setTimeout(() => {
+                    window.location.href = finalWebsite;
+                }, 1000); // Redirect after 1 second
+            }).catch((err) => {
+                console.error('Failed to copy text: ', err);
+                alert('Failed to copy journey. Redirecting to the final destination...');
+                window.location.href = finalWebsite;
+            });
+        });
+
+        navigateToNextSite();
+    </script>
+</body>
+
+</html>

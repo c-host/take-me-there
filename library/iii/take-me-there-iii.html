@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Take Me There - iii</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        #container {
+            text-align: center;
+        }
+
+        #countdown {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        #current-site {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        #journey {
+            margin-top: 20px;
+        }
+
+        #copy-button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <div id="countdown"></div>
+        <div id="current-site"></div>
+        <div id="journey"></div>
+        <button id="copy-button" style="display: none;">Copy Journey</button>
+        <button id="final-destination-button" style="display: none;">Go to Final Destination</button>
+    </div>
+
+    <script>
+        const websites = [
+            'https://decentralized-pathfinder.net/start',
+            'https://journey-deliberation.org/first-step',
+            'https://interoperable-explorer.com/initial-page',
+            'https://digital-consensus.net/north',
+            'https://cyber-governance.org/embark',
+            'https://html-protocol.com/opening-tag',
+            'https://virtual-constitution.net/launch',
+            'https://code-deliberation.org/prologue',
+            'https://pixel-voting.com/genesis',
+            'https://data-sovereignty.net/departure',
+            'https://bit-rights.org/chapter-one',
+            'https://syntax-policy.com/introduction',
+            'https://algorithm-governance.net/origin',
+            'https://markup-legislation.org/entrance',
+            'https://logic-deliberation.com/threshold',
+            'https://digital-citizenship.net/backpack',
+            'https://code-constitution.org/oasis',
+            'https://pixel-deliberation.com/front-page',
+            'https://syntax-rights.net/base',
+            'https://interoperable-governance.org/compass',
+            'https://html-deliberation.com/trailhead',
+            'https://cyber-constitution.net/map-edge',
+            'https://binary-policy.org/first-mile',
+            'https://markup-rights.com/ascent',
+            'https://data-deliberation.net/embarkation',
+            'https://algorithmic-constitutions.org/prologue',
+            'https://code-voting.com/based-out-of',
+            'https://virtual-rights.net/departure',
+            'https://syntax-deliberation.org/day-one',
+            'https://pixel-governance.com/crossroads',
+            'https://interoperable-rights.net/signpost',
+            'https://html-constitution.org/dawn',
+            'https://cyber-voting.com/true-north',
+            'https://binary-deliberation.net/mile-marker',
+            'https://markup-governance.org/set-sail',
+            'https://data-rights.com/first-clue',
+            'https://algorithm-voting.net/dig-site',
+            'https://code-policy.org/map-it',
+            'https://virtual-deliberation.com/panorama',
+            'https://syntax-constitution.net/reconnect',
+            'https://pixel-rights.org/claim-and-go',
+            'https://interoperable-voting.com/first-steps',
+            'https://html-governance.net/dock',
+            'https://cyber-policy.org/page-one',
+            'https://binary-constitution.com/span',
+            'https://markup-voting.net/takeoff',
+            'https://data-policy.org/ignition',
+            'https://algorithm-rights.com/laboratory',
+            'https://code-governance.net/portal',
+            'https://virtual-policy.org/craft'
+        ];
+        const finalWebsite = 'https://www.howdidyoufind.me';
+        let currentIndex = 0;
+        let journey = [];
+
+        function getRandomTime() {
+            return Math.floor(Math.random() * (8 - 4 + 1) + 4);
+        }
+
+        function formatTime(seconds) {
+            return `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
+        }
+
+        function updateCountdown(seconds) {
+            document.getElementById('countdown').textContent = formatTime(seconds);
+        }
+
+        function showCurrentSite(url) {
+            document.getElementById('current-site').textContent = `Current site: ${url}`;
+        }
+        function navigateToNextSite() {
+            if (currentIndex < 5) {
+                const randomIndex = Math.floor(Math.random() * websites.length);
+                const site = websites[randomIndex];
+                const time = getRandomTime();
+                journey.push({ site, time });
+                showCurrentSite(site);
+                let remainingTime = time;
+
+                const timer = setInterval(() => {
+                    updateCountdown(remainingTime);
+                    remainingTime--;
+
+                    if (remainingTime < 0) {
+                        clearInterval(timer);
+                        currentIndex++;
+                        navigateToNextSite();
+                    }
+                }, 1000);
+            } else {
+                showJourneySummary();
+            }
+        }
+
+        function showJourneySummary() {
+            document.getElementById('countdown').style.display = 'none';
+            document.getElementById('current-site').style.display = 'none';
+
+            const journeyHtml = journey.map((step, index) =>
+                `${index + 1}. ${step.site} (${step.time} seconds)`
+            ).join('<br>');
+
+            document.getElementById('journey').innerHTML = `
+                <h2>Your Journey:</h2>
+                ${journeyHtml}<br>
+            `;
+
+            document.getElementById('copy-button').style.display = 'inline-block';
+            document.getElementById('final-destination-button').style.display = 'none';
+        }
+
+        document.getElementById('copy-button').addEventListener('click', () => {
+            const journeyText = journey.map((step, index) =>
+                `${index + 1}. ${step.site} (${step.time} seconds)`
+            ).join('\n');
+
+            navigator.clipboard.writeText(journeyText).then(() => {
+                document.getElementById('copy-button').style.display = 'none';
+                document.getElementById('final-destination-button').style.display = 'inline-block';
+            }).catch((err) => {
+                console.error('Failed to copy text: ', err);
+                alert('Failed to copy journey. Please try again.');
+            });
+        });
+
+        document.getElementById('final-destination-button').addEventListener('click', () => {
+            window.location.href = finalWebsite;
+        });
+
+        navigateToNextSite();
+    </script>
+</body>
+
+</html>

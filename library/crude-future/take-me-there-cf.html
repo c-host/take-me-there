@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crude Futures</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #000;
+            color: #0f0;
+            overflow: hidden;
+        }
+
+        #container {
+            text-align: center;
+            border: 2px solid #0f0;
+            padding: 20px;
+            box-shadow: 0 0 10px #0f0;
+            transition: transform 0.5s, opacity 0.5s, padding 0.5s;
+            transform: scale(1.2);
+        }
+
+        #countdown {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        #current-site {
+            font-size: 18px;
+            margin-bottom: 20px;
+            word-break: break-all;
+            transition: letter-spacing 0.5s;
+        }
+
+        button {
+            background-color: #0f0;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-family: 'Courier New', monospace;
+        }
+
+        button:hover {
+            background-color: #0a0;
+        }
+
+        .glitch {
+            animation: glitch 0.3s infinite;
+        }
+
+        @keyframes glitch {
+            0% {
+                transform: translate(0)
+            }
+
+            20% {
+                transform: translate(-2px, 2px)
+            }
+
+            40% {
+                transform: translate(-2px, -2px)
+            }
+
+            60% {
+                transform: translate(2px, 2px)
+            }
+
+            80% {
+                transform: translate(2px, -2px)
+            }
+
+            100% {
+                transform: translate(0)
+            }
+        }
+
+        .meta-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .bombi,
+        .imbrices,
+        .testae {
+            position: absolute;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .bombi {
+            top: 10%;
+            left: 10%;
+        }
+
+        .imbrices {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .testae {
+            bottom: 10%;
+            right: 10%;
+        }
+
+        .shake {
+            animation: shake 0.3s cubic-bezier(.36, .07, .19, .97) both;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translate3d(0, 0, 0) scale(1);
+            }
+
+            25% {
+                transform: translate3d(-4px, 0, 0) scale(0.98);
+            }
+
+            75% {
+                transform: translate3d(4px, 0, 0) scale(0.98);
+            }
+        }
+
+        .clap {
+            animation: clap 0.3s cubic-bezier(.36, .07, .19, .97) both;
+        }
+
+        @keyframes clap {
+
+            0%,
+            100% {
+                transform: scale(1) rotate(0deg);
+                filter: blur(0px);
+            }
+
+            50% {
+                transform: scale(0.95) rotate(1deg);
+                filter: blur(2px);
+            }
+        }
+
+        .testae-rhythm,
+        .imbrices-rhythm,
+        .bombi-rhythm {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1001;
+            opacity: 0;
+            transition: opacity 0.15s;
+        }
+
+        .testae-rhythm {
+            border: 10px solid rgba(0, 0, 255, 0.2);
+            box-sizing: border-box;
+        }
+
+        .imbrices-rhythm {
+            border: 10px solid rgba(0, 255, 0, 0.2);
+            box-sizing: border-box;
+        }
+
+        .bombi-rhythm {
+            border: 10px solid rgba(255, 0, 0, 0.2);
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <h1>Crude Futures</h1>
+        <div id="countdown"></div>
+        <div id="current-site"></div>
+        <button id="final-destination-button" style="display: none;">Escape</button>
+    </div>
+    <div class="meta-layer">
+        <div class="bombi">BOMBI</div>
+        <div class="imbrices">IMBRICES</div>
+        <div class="testae">TESTAE</div>
+    </div>
+    <div class="bombi-rhythm"></div>
+    <div class="imbrices-rhythm"></div>
+    <div class="testae-rhythm"></div>
+
+    <script>
+        const websites = [
+            'collapse-theory.net',
+            'applause-mechanics.org',
+            'push-dynamics.com',
+            'structural-failure.net',
+            'ovation-science.org',
+            'force-application.com',
+            'system-breakdown.net',
+            'clapping-analysis.org',
+            'momentum-transfer.com',
+            'entropy-cascade.net',
+            'resonance-amplification.org',
+            'kinetic-propagation.com',
+            'fracture-mechanics.net',
+            'vibration-analysis.org',
+            'impact-dissipation.com',
+            'chain-reaction.net',
+            'acoustic-resonance.org',
+            'stress-distribution.com',
+            'critical-mass.net',
+            'wave-propagation.org',
+            'energy-transfer.com',
+            'tipping-point.net',
+            'harmonic-oscillation.org',
+            'domino-effect.com'
+        ];
+
+        let collapsedText = '';
+
+        const finalWebsite = 'https://www.howdidyoufind.me';
+        let currentIndex = 0;
+
+        function getRandomTime() { return Math.floor(Math.random() * 5) + 4; }
+        function formatTime(s) { return `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`; }
+        function updateCountdown(s) { document.getElementById('countdown').textContent = formatTime(s); }
+        function showCurrentSite(url) { document.getElementById('current-site').textContent = `${url}`; }
+
+        function collapseWebsite(url, progress) {
+            const parts = url.split('.');
+            const collapsed = parts.map(part => part.slice(0, Math.max(1, Math.floor(part.length * (1 - progress)))));
+            const collapsedUrl = collapsed.join('.');
+            collapsedText += collapsedUrl + '\n';
+            return collapsedUrl;
+        }
+
+        function applyGlitchEffect(progress) {
+            const container = document.getElementById('container');
+            container.style.transform = `skew(${progress * 5}deg) rotate(${progress * 3}deg)`;
+            container.style.opacity = 1 - (progress * 0.3);
+
+            const currentSite = document.getElementById('current-site');
+            currentSite.style.letterSpacing = `${progress * 5}px`;
+
+            if (progress > 0.7) {
+                container.classList.add('glitch');
+            } else {
+                container.classList.remove('glitch');
+            }
+        }
+
+        let rhythms = {
+            testae: { interval: 1600, active: false },
+            imbrices: { interval: 1200, active: false },
+            bombi: { interval: 800, active: false }
+        };
+
+        function startRhythm(type) {
+            rhythms[type].active = true;
+            const rhythmElement = document.querySelector(`.${type}-rhythm`);
+            const container = document.getElementById('container');
+
+            function pulse() {
+                if (rhythms[type].active) {
+                    rhythmElement.style.opacity = '1';
+                    container.classList.add('shake', 'clap');
+                    container.style.padding = parseInt(getComputedStyle(container).padding) - 2 + 'px';
+                    container.style.filter = `blur(2px) contrast(120%)`;
+                    setTimeout(() => {
+                        rhythmElement.style.opacity = '0';
+                        container.classList.remove('shake', 'clap');
+                        container.style.padding = parseInt(getComputedStyle(container).padding) + 2 + 'px';
+                        container.style.filter = 'none';
+                    }, 150);
+                    setTimeout(pulse, rhythms[type].interval);
+                }
+            }
+
+            pulse();
+        }
+
+        function applyMetaCollapse(progress) {
+            const metaElements = ['.testae', '.imbrices', '.bombi'];
+            const rhythmTypes = ['testae', 'imbrices', 'bombi'];
+
+            if (progress > 0.33 && metaCollapseStage === 0) {
+                document.querySelector(metaElements[0]).style.opacity = '1';
+                startRhythm(rhythmTypes[0]);
+                metaCollapseStage++;
+            } else if (progress > 0.66 && metaCollapseStage === 1) {
+                document.querySelector(metaElements[1]).style.opacity = '1';
+                startRhythm(rhythmTypes[1]);
+                metaCollapseStage++;
+            } else if (progress > 0.9 && metaCollapseStage === 2) {
+                document.querySelector(metaElements[2]).style.opacity = '1';
+                startRhythm(rhythmTypes[2]);
+                metaCollapseStage++;
+            }
+
+            // Apply overall collapse effect
+            const container = document.getElementById('container');
+            const scale = 1.2 - (currentIndex * 0.1) - (progress * 0.1);
+            container.style.transform = `scale(${scale}) perspective(100px) rotateX(${progress * 5}deg)`;
+            container.style.opacity = 1 - progress * 0.3;
+        }
+
+        function navigateToNextSite() {
+            if (currentIndex < 5) {
+                const site = websites[Math.floor(Math.random() * websites.length)];
+                const time = getRandomTime();
+                let remainingTime = time;
+
+                // Shrink and distort container at the start of each navigation
+                const container = document.getElementById('container');
+                const currentScale = parseFloat(container.style.transform.replace(/^.*scale\((\d+\.?\d*)\).*$/, '$1') || 1.2);
+                container.style.transform = `scale(${currentScale - 0.1}) skew(${currentIndex * 2}deg)`;
+
+                const timer = setInterval(() => {
+                    const progress = (time - remainingTime) / time;
+                    const collapsedSite = collapseWebsite(site, progress);
+                    showCurrentSite(collapsedSite);
+                    updateCountdown(remainingTime);
+                    applyMetaCollapse(currentIndex / 5 + progress / 5);
+
+                    remainingTime--;
+                    if (remainingTime < 0) {
+                        clearInterval(timer);
+                        currentIndex++;
+                        navigateToNextSite();
+                    }
+                }, 1000);
+            } else {
+                document.getElementById('countdown').style.display = 'none';
+                document.getElementById('current-site').style.display = 'none';
+                document.getElementById('final-destination-button').style.display = 'inline-block';
+            }
+        }
+
+        let metaCollapseStage = 0;
+
+        document.getElementById('final-destination-button').addEventListener('click', () => {
+            Object.keys(rhythms).forEach(key => rhythms[key].active = false);
+            const metaText = `BOMBI\nIMBRICES\nTESTAE\n`;
+            navigator.clipboard.writeText(metaText + collapsedText).then(() => {
+                window.location.href = finalWebsite;
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+                window.location.href = finalWebsite;
+            });
+        });
+
+        navigateToNextSite();
+    </script>
+</body>
+
+</html>

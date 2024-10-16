@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Take Me There - Choose Your Path</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 40px;
+            background-color: #ffffff;
+            color: #333;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 0.5em;
+        }
+
+        p {
+            margin-bottom: 2em;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 1em;
+        }
+
+        a {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #f0f0f0;
+            color: #333;
+            text-decoration: none;
+            border-radius: 3px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        a:hover {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .subtitle {
+            font-style: italic;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Take Me There</h1>
+    <p class="subtitle">A journey begins with a single click... select a path to embark on your journey:</p>
+    <ul id="path-list"></ul>
+    <br>
+    <p>All paths lead to <a href="https://www.howdidyoufind.me/"
+            style="display: inline; padding: 0; background-color: transparent; color: inherit; text-decoration: underline;">https://www.howdidyoufind.me/</a>
+    </p>
+
+    <script>
+        const pathList = document.getElementById('path-list');
+        const paths = [
+            { name: 'Version: Interoperable Institute Initiative - A Maze of Deliberation', file: 'library/iii/take-me-there-iii.html' },
+            { name: 'Version: Crude Future - A Collapsing Pathway', file: 'library/crude-future/take-me-there-cf.html' },
+            { name: 'Version: Prototype - An Unopinionated Journey', file: 'library/prototype/take-me-there-prototype.html' },
+            // Add more paths here as they are created
+        ];
+
+        paths.forEach(path => {
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+            a.href = path.file;
+            a.textContent = path.name;
+            li.appendChild(a);
+            pathList.appendChild(li);
+        });
+    </script>
+</body>
+
+</html>
